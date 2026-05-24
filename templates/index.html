@@ -2,36 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YOKO | Asian Loft & Kitchen</title>
     <style>
-        /* Темный фон на 4 тона темнее, глубокий графит */
+        /* Темно-песочный цвет фона */
         :root { 
             --gold: #c5a059; 
-            --bg: #0a0a0a; 
-            --bg-lighter: #1a1a1a;
+            --bg: #2d261e; 
             --text: #ffffff; 
         }
         body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica', sans-serif; margin: 0; padding: 0; }
+        .header { text-align: center; padding: 40px 20px; }
         
-        .header { text-align: center; padding: 60px 20px; background-color: var(--bg-lighter); }
-        .logo { width: 280px; max-width: 90%; margin-bottom: 30px; border-radius: 10px; }
+        /* Исправленный путь к логотипу */
+        .logo { width: 300px; margin-bottom: 20px; border-radius: 10px; }
         
-        .nav-links { margin-top: 20px; }
-        .nav-links a { margin: 0 15px; color: var(--gold); text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
+        .nav-links { margin-top: 20px; display: flex; justify-content: center; gap: 20px; }
+        .nav-links a { color: var(--gold); text-decoration: none; font-weight: bold; }
+
+        /* Контакты - теперь открываются как блок */
+        #contact-block { display: none; padding: 20px; text-align: center; border: 1px solid var(--gold); margin: 20px; }
+
+        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
+        .cat-btn { padding: 10px 20px; border: 1px solid var(--gold); background: none; color: var(--gold); cursor: pointer; border-radius: 20px; }
+        .cat-btn.active { background: var(--gold); color: #fff; }
         
-        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 40px 20px; }
-        .cat-btn { padding: 12px 30px; border: 2px solid var(--gold); background: none; color: var(--gold); cursor: pointer; border-radius: 30px; transition: 0.4s; font-weight: bold; }
-        .cat-btn:hover, .cat-btn.active { background: var(--gold); color: #000; }
-        
-        .menu-section { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
-        .menu-section.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .item { display: flex; justify-content: space-between; padding: 20px; border-bottom: 1px solid #333; }
-        .item-name { font-weight: bold; font-size: 1.1rem; }
-        .item-desc { font-size: 0.85rem; color: #aaa; margin-top: 5px; }
-        .item-price { color: var(--gold); font-weight: bold; font-size: 1.1rem; padding-left: 20px; }
+        .menu-section { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .menu-section.active { display: block; }
+        .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #4a4035; }
+        .item-price { color: var(--gold); }
     </style>
 </head>
 <body>
@@ -40,11 +38,18 @@
         <div class="nav-links">
             <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
             <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
-            <a href="tel:+37493535454">Контакты</a>
+            <a href="#" onclick="document.getElementById('contact-block').style.display='block'; return false;">Контакты</a>
         </div>
     </div>
 
-    <div class="categories" id="catNav">
+    <div id="contact-block">
+        <h3>Наши контакты</h3>
+        <p>г. Гюмри, ул. Дживани 68</p>
+        <p>Тел: +374 93 53 54 54</p>
+        <button onclick="document.getElementById('contact-block').style.display='none'">Закрыть</button>
+    </div>
+
+    <div class="categories">
         {% for category in menu.keys() %}
         <button class="cat-btn" onclick="showCat('{{ category }}')">{{ category }}</button>
         {% endfor %}
@@ -52,13 +57,9 @@
 
     {% for category, items in menu.items() %}
     <div class="menu-section" id="cat-{{ category }}">
-        <h2 style="text-align: center; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 10px;">{{ category }}</h2>
         {% for item in items %}
         <div class="item">
-            <div>
-                <div class="item-name">{{ item.name }}</div>
-                <div class="item-desc">{{ item.desc }}</div>
-            </div>
+            <div>{{ item.name }}<br><small>{{ item.desc }}</small></div>
             <div class="item-price">{{ item.price }}</div>
         </div>
         {% endfor %}
@@ -68,9 +69,7 @@
     <script>
         function showCat(cat) {
             document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('cat-' + cat).classList.add('active');
-            event.currentTarget.classList.add('active');
         }
     </script>
 </body>
