@@ -4,91 +4,80 @@
     <meta charset="UTF-8">
     <title>YOKO | Asian Loft & Kitchen</title>
     <style>
-        :root { 
-            --gold: #c5a059; 
-            --bg: #2d261e; 
-            --text: #ffffff; 
-        }
-        body { 
-            background-color: var(--bg); 
-            color: var(--text); 
-            font-family: 'Helvetica', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            position: relative;
-        }
-
-        /* Фоновый логотип */
-        .bg-logo {
+        body, html { margin: 0; padding: 0; height: 100%; overflow-x: hidden; font-family: 'Playfair Display', serif; color: white; }
+        
+        /* Видео на фоне */
+        .video-bg {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            opacity: 0.05; /* Едва заметный, как водяной знак */
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
             z-index: -1;
-            pointer-events: none;
+            object-fit: cover;
         }
 
-        .header { text-align: center; padding: 40px 20px; }
-        
-        .nav-links { margin-top: 20px; display: flex; justify-content: center; gap: 20px; }
-        .nav-links a { color: var(--gold); text-decoration: none; font-weight: bold; }
+        /* Затемнение, чтобы текст был виден */
+        .overlay { background: rgba(0, 0, 0, 0.6); min-height: 100vh; padding-bottom: 50px; }
 
-        #contact-block { display: none; padding: 20px; text-align: center; border: 1px solid var(--gold); margin: 20px auto; max-width: 400px; background: rgba(0,0,0,0.5); }
+        .header { text-align: center; padding: 40px 0; }
+        .logo { width: 200px; margin-bottom: 10px; }
+        .nav-links a { margin: 0 15px; color: #c5a059; text-decoration: none; font-weight: bold; text-transform: uppercase; }
 
-        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 20px; }
-        .cat-btn { padding: 10px 20px; border: 1px solid var(--gold); background: none; color: var(--gold); cursor: pointer; border-radius: 20px; }
-        .cat-btn.active { background: var(--gold); color: #fff; }
+        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 30px 0; }
+        .cat-btn { padding: 10px 25px; border: 1px solid #c5a059; background: rgba(0,0,0,0.3); color: #c5a059; cursor: pointer; border-radius: 50px; transition: 0.3s; }
+        .cat-btn.active { background: #c5a059; color: #fff; }
+
+        .menu-section { display: none; max-width: 500px; margin: 0 auto; text-align: center; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; }
+        .menu-section.active { display: block; animation: fadeIn 0.8s; }
         
-        .menu-section { display: none; padding: 20px; max-width: 600px; margin: 0 auto; background: rgba(0,0,0,0.3); border-radius: 10px; }
-        .menu-section.active { display: block; }
-        .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #4a4035; }
-        .item-price { color: var(--gold); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .item { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; }
+        .item-price { color: #c5a059; font-weight: bold; }
     </style>
 </head>
 <body>
-    <img src="{{ url_for('static', filename='logo.jpg') }}" class="bg-logo">
+    <video autoplay muted loop playsinline class="video-bg">
+        <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
+    </video>
 
-    <div class="header">
-        <h1>YOKO</h1>
-        <p>ASIAN LOFT & KITCHEN</p>
-        <div class="nav-links">
-            <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
-            <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
-            <a href="#" onclick="document.getElementById('contact-block').style.display='block'; return false;">Контакты</a>
+    <div class="overlay">
+        <div class="header">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+            <div class="nav-links">
+                <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
+                <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
+            </div>
         </div>
-    </div>
 
-    <div id="contact-block">
-        <h3>Наши контакты</h3>
-        <p>г. Гюмри, ул. Дживани 68</p>
-        <p>Тел: +374 93 53 54 54</p>
-        <button onclick="document.getElementById('contact-block').style.display='none'">Закрыть</button>
-    </div>
+        <div class="categories">
+            {% for category in menu.keys() %}
+            <button class="cat-btn" onclick="showCat('{{ category }}')" id="btn-{{ category }}">{{ category }}</button>
+            {% endfor %}
+        </div>
 
-    <div class="categories">
-        {% for category in menu.keys() %}
-        <button class="cat-btn" onclick="showCat('{{ category }}')">{{ category }}</button>
-        {% endfor %}
-    </div>
-
-    {% for category, items in menu.items() %}
-    <div class="menu-section" id="cat-{{ category }}">
-        {% for item in items %}
-        <div class="item">
-            <div>{{ item.name }}<br><small>{{ item.desc }}</small></div>
-            <div class="item-price">{{ item.price }}</div>
+        {% for category, items in menu.items() %}
+        <div class="menu-section" id="cat-{{ category }}">
+            <h2 style="color: #c5a059;">{{ category }}</h2>
+            {% for item in items %}
+            <div class="item">
+                <span>{{ item.name }}</span>
+                <span class="item-price">{{ item.price }}</span>
+            </div>
+            {% endfor %}
         </div>
         {% endfor %}
     </div>
-    {% endfor %}
 
     <script>
         function showCat(cat) {
             document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('cat-' + cat).classList.add('active');
+            document.getElementById('btn-' + cat).classList.add('active');
         }
+        window.onload = () => { document.querySelector('.cat-btn').click(); };
     </script>
 </body>
 </html>
