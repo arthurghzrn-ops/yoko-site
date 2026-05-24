@@ -2,50 +2,88 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YOKO | Asian Loft & Kitchen</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Helvetica', sans-serif; color: white; }
+        /* Глобальные стили */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #fff; }
+        
+        /* Видео на фоне */
         .video-bg { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; }
-        .overlay { background: rgba(0, 0, 0, 0.6); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .logo { width: 250px; margin: 30px 0; }
-        .nav-links { margin-bottom: 40px; }
-        .nav-links a { color: #c5a059; text-decoration: none; font-weight: bold; margin: 0 15px; text-transform: uppercase; }
-        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 40px; }
-        .cat-btn { padding: 10px 20px; border: 1px solid #c5a059; background: rgba(0,0,0,0.4); color: white; cursor: pointer; border-radius: 50px; transition: 0.3s; }
-        .cat-btn.active { background: #c5a059; }
-        .menu-section { display: none; width: 100%; max-width: 500px; text-align: center; }
+        .overlay { background: rgba(0, 0, 0, 0.65); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; }
+
+        /* Блок Hero */
+        .hero { text-align: center; max-width: 700px; margin-bottom: 80px; }
+        .logo { width: 220px; margin-bottom: 25px; border-radius: 50%; border: 2px solid #c5a059; padding: 5px; }
+        h1 { font-size: 2.8rem; margin: 0; color: #c5a059; text-transform: uppercase; letter-spacing: 2px; }
+        .slogan { font-size: 1.3rem; font-style: italic; color: #eee; margin: 15px 0; }
+        .about-text { font-size: 1rem; color: #ccc; line-height: 1.8; }
+
+        /* Блок Меню */
+        .menu-container { width: 100%; max-width: 600px; background: rgba(255,255,255,0.05); padding: 40px; border-radius: 20px; backdrop-filter: blur(5px); }
+        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 40px; }
+        .cat-btn { padding: 12px 24px; border: 1px solid #c5a059; background: transparent; color: #c5a059; cursor: pointer; border-radius: 30px; transition: all 0.3s; font-weight: bold; }
+        .cat-btn.active { background: #c5a059; color: #fff; }
+        .menu-section { display: none; }
         .menu-section.active { display: block; animation: fadeIn 0.5s; }
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .item { display: flex; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .item-price { color: #c5a059; font-weight: bold; }
+        
+        .item { display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .item-name { font-size: 1.1rem; }
+        .item-price { color: #c5a059; font-weight: bold; font-size: 1.1rem; }
+
+        /* Футер (Контакты) */
+        .footer { margin-top: 80px; text-align: center; border-top: 1px solid rgba(197, 160, 89, 0.3); padding-top: 40px; width: 100%; max-width: 600px; }
+        .footer-links { margin-bottom: 20px; }
+        .footer-links a { color: #fff; text-decoration: none; margin: 0 20px; font-weight: bold; font-size: 1.1rem; }
+        .footer-info { color: #aaa; margin-top: 10px; }
     </style>
 </head>
 <body>
     <video autoplay muted loop playsinline class="video-bg">
         <source src="{{ url_for('static', filename='background.mp4') }}" type="video/mp4">
     </video>
+
     <div class="overlay">
-        <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
-        <div class="nav-links">
-            <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
-            <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
-        </div>
-        <div class="categories">
-            {% for category in menu.keys() %}
-            <button class="cat-btn" onclick="showCat('{{ category }}')" id="btn-{{ category }}">{{ category }}</button>
-            {% endfor %}
-        </div>
-        {% for category, items in menu.items() %}
-        <div class="menu-section" id="cat-{{ category }}">
-            {% for item in items %}
-            <div class="item">
-                <span>{{ item.name }}</span>
-                <span class="item-price">{{ item.price }}</span>
+        <section class="hero">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+            <h1>YOKO</h1>
+            <p class="slogan">Два мира. Одно меню. Идеальный вкус.</p>
+            <p class="about-text">YOKO — это точка притяжения, где утонченность азиатских кулинарных традиций встречается с атмосферой современного лофта. Мы создали пространство для тех, кто ценит качество, эстетику и безупречный вкус.</p>
+        </section>
+
+        <div class="menu-container">
+            <div class="categories">
+                {% for category in menu.keys() %}
+                <button class="cat-btn" onclick="showCat('{{ category }}')" id="btn-{{ category }}">{{ category }}</button>
+                {% endfor %}
+            </div>
+
+            {% for category, items in menu.items() %}
+            <div class="menu-section" id="cat-{{ category }}">
+                {% for item in items %}
+                <div class="item">
+                    <span class="item-name">{{ item.name }}</span>
+                    <span class="item-price">{{ item.price }}</span>
+                </div>
+                {% endfor %}
             </div>
             {% endfor %}
         </div>
-        {% endfor %}
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="https://www.instagram.com/yoko.asianloft/">INSTAGRAM</a>
+                <a href="https://t.me/yoko_loft_kitchen_bot">TELEGRAM</a>
+            </div>
+            <div class="footer-info">
+                <p>г. Гюмри, ул. Дживани 68</p>
+                <p>+374 93 53 54 54</p>
+            </div>
+        </footer>
     </div>
+
     <script>
         function showCat(cat) {
             document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
