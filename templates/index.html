@@ -6,36 +6,51 @@
     <title>{{ title }}</title>
     <style>
         body { background-color: #121212; color: #e0e0e0; font-family: 'Arial', sans-serif; margin: 0; padding: 0; text-align: center; }
-        header { padding: 100px 20px; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%); }
-        h1 { font-size: 3.5rem; margin: 0; color: #ffffff; letter-spacing: 4px; }
-        p.slogan { font-style: italic; color: #ff4e4e; font-size: 1.5rem; margin-top: 10px; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .menu-item { background: #1a1a1a; border: 1px solid #2a2a2a; padding: 20px; margin: 15px 0; border-radius: 8px; text-align: left; display: flex; justify-content: space-between; align-items: center; }
-        .menu-text { max-width: 70%; }
-        .menu-title { font-size: 1.3rem; color: #ffffff; margin: 0 0 5px 0; }
-        .menu-desc { font-size: 0.9rem; color: #aaaaaa; margin: 0; }
-        .menu-price { font-size: 1.4rem; color: #ff4e4e; font-weight: bold; }
+        header { padding: 80px 20px 40px 20px; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%); }
+        h1 { font-size: 3.5rem; margin: 0; color: #ffffff; letter-spacing: 6px; font-weight: bold; }
+        p.slogan { font-style: italic; color: #ff4e4e; font-size: 1.3rem; margin-top: 15px; letter-spacing: 1px; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; text-align: left; }
+        
+        .category-title { color: #ffffff; font-size: 1.8rem; border-left: 4px solid #ff4e4e; padding-left: 12px; margin: 40px 0 20px 0; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .menu-item { background: #1a1a1a; border: 1px solid #232323; padding: 20px; margin: 15px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .menu-item:hover { border-color: #333333; background: #1c1c1c; }
+        .menu-text { max-width: 75%; }
+        .menu-title { font-size: 1.2rem; color: #ffffff; margin: 0 0 6px 0; font-weight: bold; }
+        .menu-desc { font-size: 0.9rem; color: #888888; margin: 0; line-height: 1.4; }
+        .menu-price { font-size: 1.3rem; color: #ff4e4e; font-weight: bold; white-space: nowrap; padding-left: 15px; }
+        
+        .empty-menu { background: #1a1a1a; padding: 30px; border-radius: 8px; text-align: center; border: 1px dashed #333; color: #888; margin-top: 30px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>YOKO</h1>
-        <p style="color: #888; letter-spacing: 2px; margin: 0;">ASIAN LOFT & KITCHEN</p>
+        <p style="color: #666; letter-spacing: 3px; margin: 5px 0 0 0; font-size: 0.9rem;">ASIAN LOFT & KITCHEN</p>
         <p class="slogan">{{ slogan }}</p>
     </header>
 
     <div class="container">
-        <h2 style="color: #ffffff; border-bottom: 2px solid #ff4e4e; padding-bottom: 10px; text-align: left;">МЕНЮ</h2>
-        {% for item in menu %}
-        <div class="menu-item">
-            <div class="menu-text">
-                <p class="menu-title">{{ item.name }}</p>
-                <p class="menu-desc">{{ item.desc }}</p>
+        {% if menu %}
+            {% for category, items in menu.items() %}
+                <div class="category-title">{{ category }}</div>
+                {% for item in items %}
+                <div class="menu-item">
+                    <div class="menu-text">
+                        <p class="menu-title">{{ item.name }}</p>
+                        <p class="menu-desc">{{ item.desc }}</p>
+                    </div>
+                    <div class="menu-price">{{ item.price }}</div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            <div class="empty-menu">
+                <p style="font-size: 1.2rem; color: #fff; margin: 0 0 10px 0;">Загрузка меню...</p>
+                <p style="margin: 0;">Если меню не появилось, проверьте, добавлен ли столбец "Цена" в Google Таблицу и открыт ли к ней доступ по ссылке.</p>
             </div>
-            <div class="menu-price">{{ item.price }}</div>
-        </div>
-        {% endfor %}
+        {% endif %}
     </div>
 
 </body>
