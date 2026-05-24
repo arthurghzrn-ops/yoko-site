@@ -5,41 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YOKO | Asian Loft & Kitchen</title>
     <style>
-        :root { --gold: #c5a059; --bg: #ffffff; --text: #1a1a1a; }
-        body { background-color: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 0; }
-        .header { text-align: center; padding: 40px 20px; }
-        .logo { width: 150px; margin-bottom: 15px; }
-        .nav-links { margin-bottom: 25px; }
-        .nav-links a { margin: 0 10px; color: var(--gold); text-decoration: none; font-weight: bold; font-size: 0.9rem; }
-        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 0 10px; margin-bottom: 30px; }
-        .cat-btn { padding: 8px 16px; border: 1px solid var(--gold); background: none; color: var(--gold); cursor: pointer; border-radius: 20px; transition: 0.3s; font-size: 0.85rem; }
-        .cat-btn.active { background: var(--gold); color: white; }
-        .menu-section { display: none; padding: 0 20px; max-width: 600px; margin: 0 auto; }
-        .menu-section.active { display: block; }
-        .item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
-        .item-name { font-weight: bold; }
-        .item-desc { font-size: 0.75rem; color: #777; margin-top: 3px; }
-        .item-price { color: var(--gold); font-weight: bold; padding-left: 10px; }
+        /* Темный фон на 4 тона темнее, глубокий графит */
+        :root { 
+            --gold: #c5a059; 
+            --bg: #0a0a0a; 
+            --bg-lighter: #1a1a1a;
+            --text: #ffffff; 
+        }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica', sans-serif; margin: 0; padding: 0; }
+        
+        .header { text-align: center; padding: 60px 20px; background-color: var(--bg-lighter); }
+        .logo { width: 280px; max-width: 90%; margin-bottom: 30px; border-radius: 10px; }
+        
+        .nav-links { margin-top: 20px; }
+        .nav-links a { margin: 0 15px; color: var(--gold); text-decoration: none; font-weight: bold; text-transform: uppercase; font-size: 0.9rem; }
+        
+        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 40px 20px; }
+        .cat-btn { padding: 12px 30px; border: 2px solid var(--gold); background: none; color: var(--gold); cursor: pointer; border-radius: 30px; transition: 0.4s; font-weight: bold; }
+        .cat-btn:hover, .cat-btn.active { background: var(--gold); color: #000; }
+        
+        .menu-section { display: none; padding: 20px; max-width: 700px; margin: 0 auto; }
+        .menu-section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .item { display: flex; justify-content: space-between; padding: 20px; border-bottom: 1px solid #333; }
+        .item-name { font-weight: bold; font-size: 1.1rem; }
+        .item-desc { font-size: 0.85rem; color: #aaa; margin-top: 5px; }
+        .item-price { color: var(--gold); font-weight: bold; font-size: 1.1rem; padding-left: 20px; }
     </style>
 </head>
 <body>
     <div class="header">
         <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
         <div class="nav-links">
-            <a href="https://www.instagram.com/yoko.asianloft/">INSTAGRAM</a>
-            <a href="https://t.me/yoko_loft_kitchen_bot">TELEGRAM</a>
-            <a href="tel:+37493535454">КОНТАКТЫ</a>
+            <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
+            <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
+            <a href="tel:+37493535454">Контакты</a>
         </div>
     </div>
 
     <div class="categories" id="catNav">
         {% for category in menu.keys() %}
-        <button class="cat-btn" onclick="showCat(this, 'cat-{{ loop.index }}')">{{ category }}</button>
+        <button class="cat-btn" onclick="showCat('{{ category }}')">{{ category }}</button>
         {% endfor %}
     </div>
 
     {% for category, items in menu.items() %}
-    <div class="menu-section" id="cat-{{ loop.index }}">
+    <div class="menu-section" id="cat-{{ category }}">
+        <h2 style="text-align: center; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 10px;">{{ category }}</h2>
         {% for item in items %}
         <div class="item">
             <div>
@@ -53,11 +66,11 @@
     {% endfor %}
 
     <script>
-        function showCat(btn, id) {
+        function showCat(cat) {
             document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            btn.classList.add('active');
+            document.getElementById('cat-' + cat).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
     </script>
 </body>
