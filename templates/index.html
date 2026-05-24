@@ -4,36 +4,27 @@
     <meta charset="UTF-8">
     <title>YOKO | Asian Loft & Kitchen</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow-x: hidden; font-family: 'Playfair Display', serif; color: white; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Helvetica', sans-serif; color: white; }
         
         /* Видео на фоне */
-        .video-bg {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            z-index: -1;
-            object-fit: cover;
-        }
-
-        /* Затемнение, чтобы текст был виден */
-        .overlay { background: rgba(0, 0, 0, 0.6); min-height: 100vh; padding-bottom: 50px; }
-
-        .header { text-align: center; padding: 40px 0; }
-        .logo { width: 200px; margin-bottom: 10px; }
-        .nav-links a { margin: 0 15px; color: #c5a059; text-decoration: none; font-weight: bold; text-transform: uppercase; }
-
-        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 30px 0; }
-        .cat-btn { padding: 10px 25px; border: 1px solid #c5a059; background: rgba(0,0,0,0.3); color: #c5a059; cursor: pointer; border-radius: 50px; transition: 0.3s; }
-        .cat-btn.active { background: #c5a059; color: #fff; }
-
-        .menu-section { display: none; max-width: 500px; margin: 0 auto; text-align: center; background: rgba(0,0,0,0.4); padding: 20px; border-radius: 15px; }
-        .menu-section.active { display: block; animation: fadeIn 0.8s; }
+        .video-bg { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; }
         
+        /* Затемнение для читаемости текста */
+        .overlay { background: rgba(0, 0, 0, 0.5); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+
+        .logo { width: 200px; margin: 20px 0; }
+        .nav-links { margin-bottom: 30px; }
+        .nav-links a { color: #c5a059; text-decoration: none; font-weight: bold; margin: 0 15px; text-transform: uppercase; }
+
+        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .cat-btn { padding: 10px 20px; border: 1px solid #c5a059; background: rgba(0,0,0,0.3); color: white; cursor: pointer; border-radius: 50px; }
+        .cat-btn.active { background: #c5a059; }
+
+        .menu-section { display: none; width: 100%; max-width: 500px; text-align: center; }
+        .menu-section.active { display: block; animation: fadeIn 0.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .item { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; }
+        .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
         .item-price { color: #c5a059; font-weight: bold; }
     </style>
 </head>
@@ -43,12 +34,10 @@
     </video>
 
     <div class="overlay">
-        <div class="header">
-            <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
-            <div class="nav-links">
-                <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
-                <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
-            </div>
+        <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+        <div class="nav-links">
+            <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
+            <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
         </div>
 
         <div class="categories">
@@ -59,7 +48,6 @@
 
         {% for category, items in menu.items() %}
         <div class="menu-section" id="cat-{{ category }}">
-            <h2 style="color: #c5a059;">{{ category }}</h2>
             {% for item in items %}
             <div class="item">
                 <span>{{ item.name }}</span>
