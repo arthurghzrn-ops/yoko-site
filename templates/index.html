@@ -3,55 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>YOKO | Asian Loft & Kitchen</title>
     <style>
-        body { background-color: #121212; color: #e0e0e0; font-family: 'Arial', sans-serif; margin: 0; padding: 0; text-align: center; }
-        header { padding: 80px 20px 40px 20px; background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%); }
-        h1 { font-size: 3.5rem; margin: 0; color: #ffffff; letter-spacing: 6px; font-weight: bold; }
-        p.slogan { font-style: italic; color: #ff4e4e; font-size: 1.3rem; margin-top: 15px; letter-spacing: 1px; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; text-align: left; }
+        :root { --gold: #c5a059; --bg: #ffffff; --text: #1a1a1a; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Helvetica', sans-serif; margin: 0; padding: 0; }
+        .header { text-align: center; padding: 40px 20px; }
+        .logo { width: 150px; margin-bottom: 20px; }
+        .nav-links { margin-bottom: 30px; }
+        .nav-links a { margin: 0 10px; color: var(--gold); text-decoration: none; font-weight: bold; }
         
-        .category-title { color: #ffffff; font-size: 1.8rem; border-left: 4px solid #ff4e4e; padding-left: 12px; margin: 40px 0 20px 0; text-transform: uppercase; letter-spacing: 2px; }
+        .categories { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 0 20px; }
+        .cat-btn { padding: 10px 20px; border: 1px solid var(--gold); background: none; color: var(--gold); cursor: pointer; border-radius: 20px; transition: 0.3s; }
+        .cat-btn:hover, .cat-btn.active { background: var(--gold); color: white; }
         
-        .menu-item { background: #1a1a1a; border: 1px solid #232323; padding: 20px; margin: 15px 0; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
-        .menu-item:hover { border-color: #333333; background: #1c1c1c; }
-        .menu-text { max-width: 75%; }
-        .menu-title { font-size: 1.2rem; color: #ffffff; margin: 0 0 6px 0; font-weight: bold; }
-        .menu-desc { font-size: 0.9rem; color: #888888; margin: 0; line-height: 1.4; }
-        .menu-price { font-size: 1.3rem; color: #ff4e4e; font-weight: bold; white-space: nowrap; padding-left: 15px; }
-        
-        .empty-menu { background: #1a1a1a; padding: 30px; border-radius: 8px; text-align: center; border: 1px dashed #333; color: #888; margin-top: 30px; }
+        .menu-section { display: none; padding: 20px; max-width: 600px; margin: 0 auto; }
+        .menu-section.active { display: block; }
+        .item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .item-name { font-weight: bold; }
+        .item-desc { font-size: 0.8rem; color: #666; margin-top: 4px; }
+        .item-price { color: var(--gold); font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>YOKO</h1>
-        <p style="color: #666; letter-spacing: 3px; margin: 5px 0 0 0; font-size: 0.9rem;">ASIAN LOFT & KITCHEN</p>
-        <p class="slogan">{{ slogan }}</p>
-    </header>
-
-    <div class="container">
-        {% if menu %}
-            {% for category, items in menu.items() %}
-                <div class="category-title">{{ category }}</div>
-                {% for item in items %}
-                <div class="menu-item">
-                    <div class="menu-text">
-                        <p class="menu-title">{{ item.name }}</p>
-                        <p class="menu-desc">{{ item.desc }}</p>
-                    </div>
-                    <div class="menu-price">{{ item.price }}</div>
-                </div>
-                {% endfor %}
-            {% endfor %}
-        {% else %}
-            <div class="empty-menu">
-                <p style="font-size: 1.2rem; color: #fff; margin: 0 0 10px 0;">Загрузка меню...</p>
-                <p style="margin: 0;">Если меню не появилось, проверьте, добавлен ли столбец "Цена" в Google Таблицу и открыт ли к ней доступ по ссылке.</p>
-            </div>
-        {% endif %}
+    <div class="header">
+        <img src="https://i.ibb.co/3sX8h2D/logo.jpg" class="logo"> <div class="nav-links">
+            <a href="https://www.instagram.com/yoko.asianloft/">Instagram</a>
+            <a href="https://t.me/yoko_loft_kitchen_bot">Telegram</a>
+            <a href="tel:+37493535454">Контакты</a>
+        </div>
     </div>
 
+    <div class="categories" id="catNav">
+        {% for category in menu.keys() %}
+        <button class="cat-btn" onclick="showCat('{{ category }}')">{{ category }}</button>
+        {% endfor %}
+    </div>
+
+    {% for category, items in menu.items() %}
+    <div class="menu-section" id="cat-{{ category }}">
+        {% for item in items %}
+        <div class="item">
+            <div>
+                <div class="item-name">{{ item.name }}</div>
+                <div class="item-desc">{{ item.desc }}</div>
+            </div>
+            <div class="item-price">{{ item.price }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <script>
+        function showCat(cat) {
+            document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('cat-' + cat).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
 </body>
 </html>
